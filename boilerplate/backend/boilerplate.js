@@ -13,6 +13,7 @@ const https = require('https');
 
 const app = express();
 
+
 app.use((req, res, next) => {
   console.log('Got request', req.path, req.method);
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
@@ -22,6 +23,26 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('../frontend'))
+
+app.get('/getLeaderboard', function (req, res) {
+	const leaderBoard = [
+		{ 'rank': 1, 'name': 'aprilk', 'score': '124', 'percentCorrect': '80' },
+		{ 'rank': 2, 'name': 'lanz', 'score': '123', 'percentCorrect': '75' },
+		{ 'rank': 3, 'name': 'zaes', 'score': '122', 'percentCorrect': '70' },
+		{ 'rank': 4, 'name': '1234567890123456789012345', 'score': '121', 'percentCorrect': '60' },
+		{ 'rank': 5, 'name': 'meast', 'score': '120', 'percentCorrect': '50' }
+	];
+	res.send(leaderBoard);
+});
+
+app.get('/setConfig', function (req, res) {
+  console.log('received set config with req:');
+  const param1 = req.query.param1;
+  const param2 = req.query.param2;
+  console.log('param1: ' + param1);
+  console.log('param2: ' + param2);
+  res.send('THANKS!');
+});
 
 let options = {
    key  : fs.readFileSync('/boilerplate/certs/testing.key'),

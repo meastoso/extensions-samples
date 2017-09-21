@@ -20,10 +20,37 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/config.css">
+        <link rel="stylesheet" href="css/resources/material-design.min.css">
     </head>
-    <body>
-        <p>This is the config page!</p>
+    <body ng-app="configApp">
+    	<h2></h2>
+        <div ng-controller="ConfigController">
+        	<h2 class="header">Character Selection</h2>
+        	<div class="header-desc">Please specify one or more lodestone character URLs here. FFLogs data will be shown for each character configured.</div>
+        	<div class="example">example: <span>http://na.finalfantasyxiv.com/lodestone/character/1557210/</span></div>
+        	<div class="new-character-wrapper">
+        		<button class="add-new-character" id="button_addNewChar">
+        			<img src="images/plus_icon_circle.png" >
+        			<span>Add New Character</span>
+        		</button>
+        	</div>
+        	<div class="lodestone-url-wrapper">
+        		<input type="text" id="lodestoneURL" placeholder="Lodestone URL"/>
+        		<add-character-button></add-character-button>
+        	</div>
+        	
+        	<div class="characters-header">
+        		<h4>Currently Configured Characters</h4>
+        	</div>
+        	
+        	<div class="characters-wrapper">
+	        	<character name="Meastoso Disperde" server="Behemoth"></character>
+        	</div>
+		</div>
+		<!-- URL example: http://na.finalfantasyxiv.com/lodestone/character/1557210/ -->
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+        <script src="js/resources/jquery-3.2.1.min.js"></script>
+        <script src="js/resources/angular.min.js"></script>
         <script src="js/common.js"></script>
         <script src="js/config.js"></script>
     </body>

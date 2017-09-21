@@ -15,8 +15,156 @@ or in the "license" file accompanying this file. This file is distributed on an 
 */
 
 body {
-	font: 12px arial, sans-serif;
+	font: 12pt arial, sans-serif;
 }
 div {
 	margin: 0px;
 }
+
+.user-icon-wrapper img {
+	width: 40px;
+}
+
+.delete-icon-wrapper {
+	margin-left: 20px;
+	flex-grow: 1;
+}
+
+.delete-icon-wrapper img {
+	width: 25px;
+	float: right;
+	cursor: pointer;
+}
+
+.char-wrapper {
+	border: 1px solid #d3d3d3;
+	border-radius: 5px;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	width: 400px;
+	margin-bottom: 10px;
+}
+
+.characters-wrapper {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.char-info {
+	margin: 0 10px 0 10px;
+}
+
+.char-info .name {
+	font-size: 18pt;
+}
+
+.char-info .server {
+	font-size: 14pt;
+}
+
+.header-desc {
+	margin-top: 10px;
+}
+
+.example {
+	margin-top: 5px;
+	margin-left: 50px;
+    font-style: italic;
+}
+
+.example span {
+	font-weight: bold;
+}
+
+button.add-new-character {
+    display: flex;
+    align-items: center;
+    background: #EFEEF1;
+    border: 1px solid #9A7FCC;
+    color: #6441A4;
+    font-weight: bold;
+}
+
+button.add-new-character:hover {
+	background: #6441A4;
+    color: #EFEEF1;
+}
+	
+button.add-new-character img {
+	width: 25px;
+}
+
+button.add-new-character span {
+	margin-left: 5px;	
+}
+
+.new-character-wrapper {
+	margin-top: 20px;
+}
+
+.characters-header {
+    border-bottom: 1px solid #d3d3d3;
+    width: 450px;
+}
+
+.characters-header h4 {
+	margin-bottom: 0px;
+}
+
+.lodestone-url-wrapper {
+	display: none;
+	margin-top: 10px;
+}
+
+#lodestoneURL {
+	width: 450px;
+	font-weight: bold;
+}
+
+.lodestone-url-wrapper button {
+	font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* dark purple: #9A7FCC
+
+	"highlight" purple: #D7CCEB
+
+	VERY LIGHT purple: #EFEEF1
+
+	purple font: #9379C1
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
