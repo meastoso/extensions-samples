@@ -35,16 +35,18 @@ or in the "license" file accompanying this file. This file is distributed on an 
         		</button>
         	</div>
         	<div class="lodestone-url-wrapper">
-        		<input type="text" id="lodestoneURL" placeholder="Lodestone URL"/>
+        		<input type="text" name="lodestoneURL" id="lodestoneURL" placeholder="Lodestone URL"/>
         		<add-character-button></add-character-button>
+        		<img src="images/loading_image.gif" class="loading-image" id="addCharLoadingImg">
         	</div>
-        	
+        	<div class="error"></div>
         	<div class="characters-header">
         		<h4>Currently Configured Characters</h4>
         	</div>
-        	
+        	<div class="no-chars-div">At least one character must be configured to use this extension!</div>
+        	<img src="images/loading_image.gif" id="gettingCharDataLoading">
         	<div class="characters-wrapper">
-	        	<character name="Meastoso Disperde" server="Behemoth"></character>
+	        	<!-- <character name="Meastoso Disperde" server="Behemoth"></character> -->
         	</div>
 		</div>
 		<!-- URL example: http://na.finalfantasyxiv.com/lodestone/character/1557210/ -->

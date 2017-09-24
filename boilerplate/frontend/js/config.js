@@ -9,38 +9,84 @@ or in the "license" file accompanying this file. This file is distributed on an 
 */
 
 /*
+ * ConfigObject structure:
+ * {
+ * 		channel_id: <channel_id>,
+ * 		fflogs_username: <fflogs_username>,
+ * 		fflogs_guild: <fflogs_guild>,
+ * 		characters: [
+ * 			{
+ * 				name: <char_name>,
+ * 				server: <char_server>,
+ * 				realm: <char_realm>
+ * 			},
+ * 			{
+ * 				name: <char_name>,
+ * 				server: <char_server>,
+ * 				realm: <char_realm>
+ * 			}
+ * 		]
+ * }
+ */
 
-  Set Javascript specific to the extension configuration view in this file.
-
-*/
-$( document ).ready(function() {
-    console.log( "ready!" );
-    
-    $("#configForm").on("submit", function(e) {
-    	e.preventDefault();
-    	
-    	$.get( "setConfig?param1=whocares&param2=whocares2", function( data ) {
-    		//$( ".result" ).html( data );
-    		console.log('finished sending config!');
-		});
-    });
-    
+$( document ).ready(function() {    
     $("#button_addNewChar").on("click", function(e) {
     	e.preventDefault(); 
     	$(".lodestone-url-wrapper").show();
     });
-    
-    $(".delete-character-anchor").on("click", function(e) {
-    	console.log('deleting!');
-    	e.preventDefault();
-    	//$(this).closest("character").remove();
-    });
-    
 });
 
+//GLOBAL VARIABLES
+//NOTE: NORMALLY I THINK THIS IS GARBAGE BUT I WANT TO FINISH THIS PROJECT
+let CHANNEL_ID = 0;
+
 const app = angular.module("configApp",[]);
-app.controller("ConfigController", function($scope) {
-  //$scope.message = "Hello, AngularJS";
+app.controller("ConfigController", function($scope, $http, $compile) {
+	// initialize current configuration
+	
+	window.Twitch.ext.onAuthorized(function(auth) {
+		var parts = auth.token.split(".");
+		var payload = JSON.parse(window.atob(parts[1]));
+		if (payload.channel_id) {
+			CHANNEL_ID = payload.channel_id;
+		}
+		// initialize current configuration
+		$("#gettingCharDataLoading").show();
+		const url = '/getChars';
+		$http({
+			url : url,
+			method : "GET",
+			params : {
+				channelID: CHANNEL_ID
+			}
+		}).then(function successCallback(response) {
+			$("#gettingCharDataLoading").hide();
+			console.log('initialization of getConfig success');
+			console.log(response);
+			const charArr = response.data;
+			// build character doms here
+			if (charArr == undefined || charArr == null || charArr.length < 1) {
+				// no config yet, show minimum characters message
+				$(".no-chars-div").show();
+			}
+			else {
+				// use charArr and build DOM
+				charArr.forEach(function(element) {
+					const charName = element.name;
+		        	const serverName = element.server;
+		        	const realm = element.realm;
+		        	const newCharacterSyntax = '<character name="' + charName + '" server="' + serverName + '" realm="' + realm + '"></character>';
+		        	const el = $compile( newCharacterSyntax )( $scope );
+		        	$('.characters-wrapper').append(el);
+				});
+			}
+		
+		}, function errorCallback(response) {
+			console.log('initialization of getConfig failed!');
+			console.log(response);
+			$("#gettingCharDataLoading").hide();
+		});
+	});
 })
 .directive('character', function() {
 	return {
@@ -55,33 +101,70 @@ app.controller("ConfigController", function($scope) {
 })
 .directive( 'deleteCharacterButton', function () {
   return {
-	  restrict: 'E',
-	  scope: { text: '@' },
+	  	restrict: 'E',
+	  	scope: { text: '@' },
 	    template: '<a ng-click="deleteCharacter()"><img src="images/trash_icon.png"></a>',
-	    controller: function ( $scope, $element ) {
-	      $scope.deleteCharacter = function () {
-	    	  console.log('clicked delete!');
-	    	  $element.closest("character").remove();
+	    controller: function ( $scope, $element, $http ) {
+	    	$scope.deleteCharacter = function () {
+	    		console.log('clicked delete!');
+	    		const charElement = $element.closest("character");
+	    		const charName = $(charElement).attr("name");
+	    		const serverName = $(charElement).attr("server");
+	    		const realm = $(charElement).attr("realm");
+	    		$(charElement).find(".char-wrapper").addClass("greyed-out");
+	    	  	const url = '/deleteChar';
+	    		$http({
+	    			method: 'POST',
+	    			url: url,
+	    			data: $.param({channelID: CHANNEL_ID, name: charName, server: serverName, realm: realm}),
+	    			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+	    		}).then(function successCallback(response) {
+	    			console.log('success');
+	    			charElement.remove();
+		        	
+	    		}, function errorCallback(response) {
+	    		    console.log('failed!');
+	    		    //$('.error').text(response.data);
+	    		    //$("#addCharLoadingImg").hide();
+	    		});
+	    		// TODO: check if no characters left after deletion and show no-chars div
 	      };
 	    }
     };
 })
-.directive( 'addCharacterButton', function ( $compile ) {
-  return {
-	  restrict: 'E',
-	  scope: { text: '@' },
+.directive( 'addCharacterButton', function ( $compile, $http ) {
+	return {
+		restrict: 'E',
+		scope: { text: '@' },
 	    template: '<button ng-click="addCharacter()">Save Character</button>',
 	    controller: function ( $scope, $element ) {
-	      $scope.addCharacter = function () {
-	    	// TODO: go to EBS (backend), parse URL for character info and save
-			// in S3
-	    	  console.log('clicked attribute');
-	    		const charName = "Another Character";
-	        	const serverName = "ServerABC";
-	        	const newCharacterSyntax = '<character name="' + charName + '" server="' + serverName + '"></character>';
-	        	const el = $compile( newCharacterSyntax )( $scope );
-	        	$('.characters-wrapper').append(el);
-	      };
+	    	$scope.addCharacter = function () {
+	    		$("#addCharLoadingImg").show();
+	    		$('.error').text(""); // clear input upon new attempt
+	    		console.log('clicked attribute');
+	    		const url = '/addChar';
+	    		$http({
+	    			method: 'POST',
+	    			url: url,
+	    			data: $.param({channelID: CHANNEL_ID, lodestoneURL: $("#lodestoneURL").val()}),
+	    			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+	    		}).then(function successCallback(response) {
+	    			console.log('success');
+	    			$(".no-chars-div").hide();
+	    			const charName = response.data.name;
+		        	const serverName = response.data.server;
+		        	const realm = response.data.realm;
+		        	const newCharacterSyntax = '<character name="' + charName + '" server="' + serverName + '" realm="' + realm + '"></character>';
+		        	const el = $compile( newCharacterSyntax )( $scope );
+		        	$('.characters-wrapper').append(el);
+		        	$("#addCharLoadingImg").hide();
+		        	
+	    		}, function errorCallback(response) {
+	    		    console.log('failed!');
+	    		    $('.error').text(response.data);
+	    		    $("#addCharLoadingImg").hide();
+	    		});
+	    	};
 	    }
     };
 });

@@ -1,8 +1,13 @@
 {
   "author": "Twitch Interactive, Inc.",
   "dependencies": {
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "body-parser": "^1.18.1",
+    "aws-sdk": "2.121.0"
   },
+  "scripts": {
+	    "start": "node boilerplate.js"
+	},
   "description": "Provides a simple starting point to create and locally develop your Twitch extension.",
   "license": "Apache-2.0",
   "main": "boilerplate.js",

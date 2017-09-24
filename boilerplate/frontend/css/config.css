@@ -127,15 +127,32 @@ button.add-new-character span {
 	font-weight: bold;
 }
 
+.error {
+	color: red;
+	margin-top: 5px;
+}
 
+.loading-image {
+	display: none; /* shown via javascript */
+	width: 17px;
+	vertical-align: text-bottom;
+}
 
+.greyed-out {
+	background-color: #3d3d3d;
+	opacity: 0.3;
+}
 
+.no-chars-div {
+	display: none;
+	color: red;
+	margin-top: 5px;
+}
 
-
-
-
-
-
+#gettingCharDataLoading {
+	display: none;
+	margin-left: 180px;
+}
 
 
 

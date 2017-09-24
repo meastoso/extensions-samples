@@ -10,9 +10,15 @@ or in the "license" file accompanying this file. This file is distributed on an 
 const express = require('express');
 const fs = require('fs');
 const https = require('https');
+const s3Utils = require('./s3/s3Utils.js');
 
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 
 app.use((req, res, next) => {
   console.log('Got request', req.path, req.method);
@@ -35,13 +41,73 @@ app.get('/getLeaderboard', function (req, res) {
 	res.send(leaderBoard);
 });
 
-app.get('/setConfig', function (req, res) {
-  console.log('received set config with req:');
-  const param1 = req.query.param1;
-  const param2 = req.query.param2;
-  console.log('param1: ' + param1);
-  console.log('param2: ' + param2);
-  res.send('THANKS!');
+app.post('/addChar', function (req, res) {
+	const lodestoneURL = req.body.lodestoneURL;
+	const channel_id = req.body.channelID;
+	//TODO: go to EBS (backend), parse URL for character info and save in S3
+	//res.send('ERROR: Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com');
+	// NOTE: CHECK THE CHARACTER DOESNT ALREADY EXIST BEFORE ADDING IT, RETURN ERROR IF CHARACTER EXISTS
+	// ALSO INCLUDE REGION/REALM 'NA' when storing data!
+	const parsedChar = {
+		  name: 'Aeal Disperde',
+		  server: 'Leviathan',
+		  realm: 'NA'
+	}
+	
+	s3Utils.addChar(channel_id, parsedChar)
+		.then((data) => {
+			res.send(parsedChar);
+			console.log('returning parsedChar data');
+			console.log(data);
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send('ERROR: ' + err);
+		});
+	
+	
+	
+	
+	//s3Utils.addChar(channel_id, parsedChar).then()
+	//res.send(parsedChar);
+	console.log('finished addChar function');
+	//res.status(500).send('ERROR: Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com')
+});
+
+app.post('/deleteChar', function (req, res) {
+	const name = req.body.name;
+	const server = req.body.server;
+	const realm = req.body.realm;
+	const channel_id = req.body.channelID;
+	const parsedChar = {
+		  name: name,
+		  server: server,
+		  realm: realm
+	}
+	s3Utils.deleteChar(channel_id, parsedChar)
+		.then((data) => {
+			res.send(parsedChar);
+			console.log('returning parsedChar data');
+			console.log(data);
+		})
+		.catch((err) => {
+			console.error(err);
+		});
+	//res.status(500).send('ERROR: Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com')
+});
+
+app.get('/getChars', function (req, res) {
+	const channel_id = req.query.channelID;
+	console.log('express getting chars for channel_id: ' + channel_id);
+	s3Utils.getChars(channel_id)
+		.then((data) => {
+			res.send(data); // array of characters; empty if no config yet
+			console.log('returning getConfig data');
+			console.log(data); // data should be array of characters
+		})
+		.catch((err) => {
+			console.error(err);
+		});
 });
 
 let options = {
