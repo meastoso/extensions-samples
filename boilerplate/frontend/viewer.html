@@ -20,16 +20,103 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/viewer.css">
+        <link rel="stylesheet" href="css/resources/angular-material.css">
+        <script src="js/resources/angular.min.js"></script>
+        <script src="js/resources/angular-animate.min.js"></script>
+        <script src="js/resources/angular-aria.min.js"></script>
+        <script src="js/resources/angular-material.js"></script>
     </head>
     <body ng-app="viewerApp">
     	<div id="extension" ng-controller="ViewerController">
     		<div class="fflogs-wrapper">
-    			<span class="menu-button"></span>
+    			<div class="fflogs-main-container" ng-show="extensionOpen">
+    				<div class="summary-wrapper ng-class:{ 'body-show': showBody };">
+    					<h1 ng-show="!showBody">FFLogs Summaries</h1>
+    					<div class="summary-back" ng-click="showBody = false" ng-show="showBody">
+    						<span>BACK</span>
+    					</div>
+    					<div class="job-menu-small" ng-show="showBody">
+    						<div class="job" ng-click="clickJob('BRD', 'Meastoso Disperde-Behemoth')">
+								<span>BRD</span>
+							</div>
+							<div class="job">
+								<span>MCH</span>
+							</div>
+							<div class="job">
+								<span>WHM</span>
+							</div>
+    					</div>
+    					<div class="characters-wrapper" ng-show="!showBody">
+    						<div class="char-wrapper">
+    							<div class="char-data">
+    								<div class="user-icon-wrapper">
+										<img src="images/user_icon.png">
+									</div>
+									<div class="char-info">
+										<div class="name">Meastoso Disperde</div>
+										<div class="server">Behemoth</div>
+									</div>
+    							</div>
+								<div class="char-jobs">
+									<div class="job" ng-click="clickJob('BRD', 'Meastoso Disperde-Behemoth')">
+										<span>BRD</span>
+									</div>
+									<div class="job">
+										<span>MCH</span>
+									</div>
+									<div class="job">
+										<span>WHM</span>
+									</div>
+								</div>
+							</div>
+							<div class="char-wrapper">
+    							<div class="char-data">
+    								<div class="user-icon-wrapper">
+										<img src="images/user_icon.png">
+									</div>
+									<div class="char-info">
+										<div class="name">Qettzim Nara</div>
+										<div class="server">Leviathan</div>
+									</div>
+    							</div>
+								<div class="char-jobs">
+									<div class="job">
+										<span>SAM</span>
+									</div>
+									<div class="job">
+										<span>PLD</span>
+									</div>
+									<div class="job">
+										<span>DRK</span>
+									</div>
+								</div>
+							</div>
+    					</div>
+    				</div>
+    				<div class="body-content" ng-show="showBody">
+    					<p>HERE IS THE CONTENT!!!!!</p>
+    					<md-button class="md-icon-button md-primary" aria-label="Settings">
+					        test button
+					      </md-button>
+    				</div>
+    				<div class="recent-parses-wrapper ng-class:{ 'body-show': showBody };">
+    					<h1 ng-show="!showBody">Recent Parses</h1>
+    					<div class="coming-soon">
+    						<div ng-show="showBody">Recent Parses</div>
+    						<p>Coming Soon!</p>
+    					</div>
+    				</div>
+    				<!-- <ng-gauge size="200" type="full" thick="5" min="0" max="120" value="68.2" cap="round" label="Speed" 
+    					foreground-color="#ffcc66" background-color="rgba(255,255,255, 0.4)" append="mph"></ng-gauge> -->
+    			</div>
+    			<span class="menu-button ng-class:{ 'show': extensionOpen };" ng-click="toggleShow()">
+    				<img src="images/ff-logo.png" id="img_fflogo">
+    			</span>
     		</div>
         </div>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
         <script src="js/resources/jquery-3.2.1.min.js"></script>
-        <script src="js/resources/angular.min.js"></script>
+        <script src="js/resources/angularjs-gauge.js"></script>
         <script src="js/common.js"></script>
         <script src="js/viewer.js"></script>
     </body>

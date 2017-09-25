@@ -132,3 +132,121 @@ body::-webkit-scrollbar-thumb {
     background-color: hsla(0, 0%, 100%, .4);
     border-radius: 3px
 }
+
+.user-icon-wrapper img {
+	width: 40px;
+}
+
+.char-wrapper {
+	border: 1px solid #bbb;
+	border-radius: 5px;
+	padding: 5px;
+	margin-bottom: 10px;
+	width: 280px;
+}
+
+.char-data {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.char-info {
+	margin: 0 10px 0 10px;
+}
+
+.char-info .name {
+	font-size: 14pt;
+}
+
+.char-info .server {
+	font-size: 10pt;
+}
+
+.char-jobs {
+	display: flex;
+	justify-content: space-evenly;
+	margin-top: 10px;
+}
+
+.header-desc {
+	margin-top: 10px;
+}
+
+.fflogs-main-container {
+	background-color: #f3f3f3;
+	border-radius: 5px;
+	box-shadow: 5px 5px 8px 0px #888888;
+	display: flex;
+}
+
+.summary-wrapper,
+.recent-parses-wrapper {
+	border: 1px solid #3d3d3d;
+	padding: 10px;
+	z-index: 2;
+}
+
+.summary-wrapper {
+	border-radius: 5px 0px 0px 5px;
+}
+
+.recent-parses-wrapper {
+	border-radius: 0px 5px 5px 0px;
+}
+
+.fflogs-main-container h1 {
+	margin-top: 0px;
+	text-align: center;
+}
+
+.fflogs-main-container .recent-parses-wrapper h1 {
+	width: 280px; /* to match the left-side equally */
+}
+
+.coming-soon {
+	text-align: center;
+}
+
+.coming-soon > div {
+	font-weight: bold;
+}
+
+#img_fflogo {
+	width: 48px;
+}
+
+
+
+/* BODY SHOWN CSS RULES BELOW HERE */
+.summary-wrapper.body-show,
+.recent-parses-wrapper.body-show {
+	width: 50px;
+}
+
+.body-content {
+	width: 500px;
+	border-top: 1px solid #3d3d3d;
+	border-bottom: 1px solid #3d3d3d;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
