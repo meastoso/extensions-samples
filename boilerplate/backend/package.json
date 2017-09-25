@@ -3,8 +3,11 @@
   "dependencies": {
     "express": "^4.15.4",
     "body-parser": "^1.18.1",
-    "aws-sdk": "2.121.0"
-  },
+    "aws-sdk": "2.121.0",
+    "cheerio": "1.0.0-rc.2",
+    "request": "2.82.0",
+    "node-rest-client": "3.1.0"
+    },
   "scripts": {
 	    "start": "node boilerplate.js"
 	},

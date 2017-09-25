@@ -11,6 +11,8 @@ const express = require('express');
 const fs = require('fs');
 const https = require('https');
 const s3Utils = require('./s3/s3Utils.js');
+const loadestoneParser = require('./parser/lodestoneParser.js');
+const fflogsUtils = require('./fflogs/fflogsUtils.js');
 
 const app = express();
 
@@ -28,50 +30,51 @@ app.use((req, res, next) => {
   return next();
 });
 
-app.use(express.static('../frontend'))
+app.use(express.static('../frontend'));
 
-app.get('/getLeaderboard', function (req, res) {
-	const leaderBoard = [
-		{ 'rank': 1, 'name': 'aprilk', 'score': '124', 'percentCorrect': '80' },
-		{ 'rank': 2, 'name': 'lanz', 'score': '123', 'percentCorrect': '75' },
-		{ 'rank': 3, 'name': 'zaes', 'score': '122', 'percentCorrect': '70' },
-		{ 'rank': 4, 'name': '1234567890123456789012345', 'score': '121', 'percentCorrect': '60' },
-		{ 'rank': 5, 'name': 'meast', 'score': '120', 'percentCorrect': '50' }
-	];
-	res.send(leaderBoard);
-});
-
-app.post('/addChar', function (req, res) {
-	const lodestoneURL = req.body.lodestoneURL;
-	const channel_id = req.body.channelID;
-	//TODO: go to EBS (backend), parse URL for character info and save in S3
-	//res.send('ERROR: Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com');
-	// NOTE: CHECK THE CHARACTER DOESNT ALREADY EXIST BEFORE ADDING IT, RETURN ERROR IF CHARACTER EXISTS
-	// ALSO INCLUDE REGION/REALM 'NA' when storing data!
+app.get('/getSummaryForChar', function (req, res) {
+	const charName = req.query.charName;
+	const serverName = req.query.serverName;
+	const realmName = req.query.realmName;
 	const parsedChar = {
-		  name: 'Aeal Disperde',
-		  server: 'Leviathan',
-		  realm: 'NA'
-	}
-	
-	s3Utils.addChar(channel_id, parsedChar)
-		.then((data) => {
-			res.send(parsedChar);
-			console.log('returning parsedChar data');
-			console.log(data);
+			name: charName,
+			server: serverName,
+			realm: realmName
+	};
+	fflogsUtils.getSummaryForChar(parsedChar)
+		.then((summaryArr) => {
+			res.send(summaryArr);
+			console.log('returning summaryArr data');
+			console.log(summaryArr);
 		})
 		.catch((err) => {
 			console.error(err);
 			res.status(500).send('ERROR: ' + err);
 		});
 	
-	
-	
-	
-	//s3Utils.addChar(channel_id, parsedChar).then()
-	//res.send(parsedChar);
+});
+
+app.post('/addChar', function (req, res) {
+	const lodestoneURL = req.body.lodestoneURL;
+	const channel_id = req.body.channelID;
+	loadestoneParser.getParsedCharacterData(lodestoneURL)
+		.then((parsedChar) => {
+			s3Utils.addChar(channel_id, parsedChar)
+			.then((data) => {
+				res.send(parsedChar);
+				console.log('returning parsedChar data');
+				console.log(data);
+			})
+			.catch((err) => {
+				console.error(err);
+				res.status(500).send('ERROR: ' + err);
+			});
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send('ERROR: ' + err);
+		});
 	console.log('finished addChar function');
-	//res.status(500).send('ERROR: Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com')
 });
 
 app.post('/deleteChar', function (req, res) {

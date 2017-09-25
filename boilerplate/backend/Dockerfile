@@ -8,8 +8,8 @@ WORKDIR /boilerplate/backend
 COPY ./package.json /boilerplate/backend/
 COPY ./credentials /boilerplate/backend/
 RUN npm install supervisor -g
-RUN npm install body-parser -g
-RUN npm install aws-sdk -g
+# RUN npm install body-parser -g
+# RUN npm install aws-sdk -g
 RUN npm install
 
 # RUN export AWS_ACCESS_KEY_ID=$(aws --profile default configure get aws_access_key_id)

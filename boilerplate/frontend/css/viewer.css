@@ -20,3 +20,115 @@ body {
 div {
 	margin: 0px;
 }
+
+/* The animation code */
+@keyframes menu-button-load {
+    0%   {
+        filter: saturate(0);
+	    transform: rotate(-270deg) scale3d(.5,.5,.5);
+	    opacity: 0;
+    }
+    20%   {
+        transform: rotate(0deg) scale3d(1.2,1.2,1.2);
+    	opacity: 1;
+    }
+    25%   {
+        transform: scaleX(1);
+    	opacity: 1;
+    }
+    80%   {
+        transform: scaleX(1);
+    	opacity: 1;
+    }
+    100%   {
+        transform: scaleX(1);
+    	opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0%   {
+	    opacity: 1;
+	    transform: scaleX(1);
+	    box-shadow: 0 0 0 0 hsla(0,0%,78%,.4);
+	    filter: saturate(150%);
+    }
+    100%   {
+		opacity: 1;
+	    transform: scaleX(1);
+	    box-shadow: 0 0 0 10px hsla(0,0%,78%,0);
+    }
+}
+
+@keyframes fade-out {
+    0%   {
+		opacity: 1;
+   		transform: scaleX(1);
+    }
+    100%   {
+		opacity: 0;
+    	transform: scale3d(.8,.8,.8);
+    }
+}
+
+body #extension {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0
+}
+
+body .fflogs-wrapper {
+	position: absolute;
+    right: 60px;
+    bottom: 85px;
+    z-index: 50;
+}
+
+body .menu-button {
+    opacity: 0;
+    transform: scale3d(.8,.8,.8);
+    transition: transform .2s cubic-bezier(.17,.67,.7,2.5),background-color .2s ease-out,opacity .2s ease-out;
+    animation: menu-button-load 3s cubic-bezier(.42,.97,.52,1.49),menu-pulse 1.5s 1s 3,fade-out 2s 5.5s cubic-bezier(.17,.67,.7,2.5);
+    position: relative;
+    float: right;
+    margin-top: 10px;
+    height: 2.85rem;
+    width: 3.65rem;
+    background: #293a3d;
+    box-shadow: 0 0 3px rgba(0,0,0,.7);
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body #extension.menu-open .menu-button,
+body #extension:hover .menu-button {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+body .menu-button.show {
+    opacity: 1!important;
+    transform: scaleX(1)
+}
+
+
+body::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background-color: hsla(0, 0%, 100%, .1)
+}
+
+body::-webkit-scrollbar {
+    width: 5px
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: hsla(0, 0%, 100%, .4);
+    border-radius: 3px
+}
