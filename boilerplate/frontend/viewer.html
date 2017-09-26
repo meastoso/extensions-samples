@@ -18,9 +18,9 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/resources/angular-material.css">
         <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/viewer.css">
-        <link rel="stylesheet" href="css/resources/angular-material.css">
         <script src="js/resources/angular.min.js"></script>
         <script src="js/resources/angular-animate.min.js"></script>
         <script src="js/resources/angular-aria.min.js"></script>
@@ -36,68 +36,16 @@ or in the "license" file accompanying this file. This file is distributed on an 
     						<span>BACK</span>
     					</div>
     					<div class="job-menu-small" ng-show="showBody">
-    						<div class="job" ng-click="clickJob('BRD', 'Meastoso Disperde-Behemoth')">
-								<span>BRD</span>
-							</div>
-							<div class="job">
-								<span>MCH</span>
-							</div>
-							<div class="job">
-								<span>WHM</span>
-							</div>
+    						<!-- populated by controller on start-up -->
+      						<!-- TODO: Job badge icons for border/fill colors:
+      						https://img00.deviantart.net/ad91/i/2015/315/9/b/ffxiv_job_stone_badges_by_kotatsucats-d9ge0zi.jpg -->
     					</div>
     					<div class="characters-wrapper" ng-show="!showBody">
-    						<div class="char-wrapper">
-    							<div class="char-data">
-    								<div class="user-icon-wrapper">
-										<img src="images/user_icon.png">
-									</div>
-									<div class="char-info">
-										<div class="name">Meastoso Disperde</div>
-										<div class="server">Behemoth</div>
-									</div>
-    							</div>
-								<div class="char-jobs">
-									<div class="job" ng-click="clickJob('BRD', 'Meastoso Disperde-Behemoth')">
-										<span>BRD</span>
-									</div>
-									<div class="job">
-										<span>MCH</span>
-									</div>
-									<div class="job">
-										<span>WHM</span>
-									</div>
-								</div>
-							</div>
-							<div class="char-wrapper">
-    							<div class="char-data">
-    								<div class="user-icon-wrapper">
-										<img src="images/user_icon.png">
-									</div>
-									<div class="char-info">
-										<div class="name">Qettzim Nara</div>
-										<div class="server">Leviathan</div>
-									</div>
-    							</div>
-								<div class="char-jobs">
-									<div class="job">
-										<span>SAM</span>
-									</div>
-									<div class="job">
-										<span>PLD</span>
-									</div>
-									<div class="job">
-										<span>DRK</span>
-									</div>
-								</div>
-							</div>
+    						<!-- populated by controller on start-up -->
     					</div>
     				</div>
-    				<div class="body-content" ng-show="showBody">
-    					<p>HERE IS THE CONTENT!!!!!</p>
-    					<md-button class="md-icon-button md-primary" aria-label="Settings">
-					        test button
-					      </md-button>
+   					<div class="body-content" ng-show="showBody">
+   						<!-- populated by controller on start-up -->
     				</div>
     				<div class="recent-parses-wrapper ng-class:{ 'body-show': showBody };">
     					<h1 ng-show="!showBody">Recent Parses</h1>
@@ -119,5 +67,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <script src="js/resources/angularjs-gauge.js"></script>
         <script src="js/common.js"></script>
         <script src="js/viewer.js"></script>
+        <script src="js/jobUtils.js"></script>
+        <script src="js/fflogsUtils.js"></script>
     </body>
 </html>

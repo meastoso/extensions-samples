@@ -1,0 +1,14 @@
+<div class="char-wrapper" data-char="{{charName}}" data-server="{{serverName}}">
+	<div class="char-data">
+		<div class="user-icon-wrapper">
+			<img src="images/user_icon.png">
+		</div>
+		<div class="char-info">
+			<div class="name">{{charName}}</div>
+			<div class="server">{{serverName}}</div>
+		</div>
+	</div>
+	<div class="char-jobs">
+		<job-button ng-repeat="job in jobsArr" job="{{job}}" char="{{charName}}" server="{{serverName}}"></job-button>
+	</div>
+</div>

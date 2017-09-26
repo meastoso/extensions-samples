@@ -137,6 +137,11 @@ body::-webkit-scrollbar-thumb {
 	width: 40px;
 }
 
+.characters-wrapper {
+	max-height: 300px;
+	overflow-y: scroll;
+}
+
 .char-wrapper {
 	border: 1px solid #bbb;
 	border-radius: 5px;
@@ -218,6 +223,8 @@ body::-webkit-scrollbar-thumb {
 
 
 
+
+
 /* BODY SHOWN CSS RULES BELOW HERE */
 .summary-wrapper.body-show,
 .recent-parses-wrapper.body-show {
@@ -228,18 +235,62 @@ body::-webkit-scrollbar-thumb {
 	width: 500px;
 	border-top: 1px solid #3d3d3d;
 	border-bottom: 1px solid #3d3d3d;
+	padding: 10px;
 }
 
+.body-header {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
 
+.body-header img {
+	width: 30px;
+	height: 30px;
+}
 
+.body-header .name {
+	font-size: 18pt;
+}
 
+.body-header .server {
+	font-size: 14pt;
+}
 
+.body-header > div {
+	margin-left: 10px;
+}
 
+.body-summaries { 
+	display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
 
+.gauge-wrapper .header {
+	text-align: center;
+	font-size: 14pt;
+}
 
+.md-icon-button {
+	height: 60px !important;
+	width: 60px !important;
+	border: 2px solid #3d3d3d;
+    margin-left: -5px !important;
+}
 
+.md-icon-button md-icon {
+	height: 40px;
+	width: 40px;
+	min-height: 40px;
+	min-width: 40px;
+}
 
-
+.job-char-server-wrapper,
+.job-menu-small .char-jobs {
+	display: none; /* shown via javascript */
+}
 
 
 
