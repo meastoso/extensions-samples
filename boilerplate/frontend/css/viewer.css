@@ -233,6 +233,15 @@ body::-webkit-scrollbar-thumb {
 	margin-left: 50px;
 }
 
+.disclaimer {
+	position: absolute;
+	bottom: 65px;
+}
+
+.disclaimer>span {
+	font-weight: bold;
+}
+
 /* BODY SHOWN CSS RULES BELOW HERE */
 .summary-wrapper,
 .recent-parses-wrapper {
