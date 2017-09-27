@@ -8,7 +8,10 @@
 			<div class="server">{{serverName}}</div>
 		</div>
 	</div>
-	<div class="char-jobs">
+	<div class="char-jobs" ng-if="!fail">
 		<job-button ng-repeat="job in jobsArr" job="{{job}}" char="{{charName}}" server="{{serverName}}"></job-button>
+	</div>
+	<div class="no-fflogs-data" ng-if="fail">
+		<div>No FFLogs data found for this character!</div>
 	</div>
 </div>

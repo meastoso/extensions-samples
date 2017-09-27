@@ -85,14 +85,11 @@ function removeCharFromConfig(configObject, charObj) {
 
 const getConfig = function(channel_id) {
 	return new Promise((resolve, reject) => {
-		console.log('called getConfig with channel_id: ' + channel_id);
 		let params = {Bucket: fflogsExtensionBucket, Key: channel_id};
 		s3.getObject(params, function(err, data) {
 			if (err) {
-				console.log(err);
 				reject(err);
 			} else {
-				console.log("Successfully fetched data with key: " + channel_id);
 				resolve(JSON.parse(data.Body.toString()));
 			}
 		});
@@ -108,27 +105,20 @@ const getConfig = function(channel_id) {
 const getChars = function(channel_id) {
 	return new Promise((resolve, reject) => {
 		const cachedConfig = configCache[channel_id];
-		console.log('cached config from getChars is: ');
-		console.log(cachedConfig);
 		if (cachedConfig === undefined || cachedConfig == null) {
-			console.log('config does not exist in cache, checking s3');
 			getConfig(channel_id)
 				.then((data) => {
 					// config exists i think? TODO: check if no file in bucket could still result in success
-					console.log('successfully retrieved config data for channel_id: ' + channel_id);
-					console.log(data);
 					configCache[channel_id] = data; // add to local cache
 					resolve(getCharsFromConfig(data)); // return characters
 				})
 				.catch((err) => {
 					// file doesn't exist with channel_id key yet?
-					console.log(err);
 					const emptyArr = [];
 					resolve(emptyArr);
 				});
 		}
 		else {
-			console.log('config exists in cache, resolving characters');
 			// config exists in cache, just resolve characters
 			resolve(getCharsFromConfig(cachedConfig));
 		}
@@ -140,9 +130,6 @@ function charExists(charArr, charObj) {
 	for (let i = 0; i < charArr.length; i++) {
 		const c = charArr[i];
 		if (c.name == charObj.name && c.server == charObj.server && c.realm == charObj.realm) {
-			console.log('found a match');
-			console.log(c);
-			console.log(charObj);
 			return true;
 		}
 	}
@@ -173,8 +160,6 @@ const addCharToConfig = function(channel_id, characterObject) {
 			getConfig(channel_id)
 				.then((configObj) => {
 					// config exists
-					console.log('successfully retrieved charConfig when adding char to config:');
-					console.log(configObj);
 					if (charExists(configObj.characters, characterObject)) {
 						reject('Character already exists for this channel configuration!');
 					}
@@ -186,7 +171,6 @@ const addCharToConfig = function(channel_id, characterObject) {
 				})
 				.catch((err) => {
 					// config doesn't exist yet
-					console.log(err);
 					const newCharArr = [characterObject];
 					const newConfigObj = getConfigObject(channel_id, newCharArr);
 					configCache[channel_id] = newConfigObj; // add this config object to cache
@@ -215,8 +199,6 @@ const deleteChar = function(channel_id, characterObject) {
 			getConfig(channel_id)
 				.then((configObj) => {
 					// config exists
-					console.log('successfully retrieved charConfig when deleting char from config:');
-					console.log(configObj);
 					if (charExists(configObj.characters, characterObject)) {
 						//configObj.characters.push(characterObject); // update returned config object with new char
 						removeCharFromConfig(configObject, characterObject);
@@ -229,7 +211,6 @@ const deleteChar = function(channel_id, characterObject) {
 				})
 				.catch((err) => {
 					// config doesn't exist yet
-					console.log(err);
 					reject('Cannot delete a character when a configuration does not exist yet.');
 				});
 		}
@@ -259,16 +240,13 @@ module.exports = {
 						// we got the updated char config back, update in S3
 						s3.createBucket({Bucket: fflogsExtensionBucket}, function(err, data) {
 							if (err) {
-								console.log(err);
 								reject(err);
 							} else {
 								let params = {Bucket: fflogsExtensionBucket, Key: channel_id, Body: JSON.stringify(updatedConfigObj)};
 								s3.putObject(params, function(err, data) {
 									if (err) {
-										console.log(err);
 										reject(err);
 									} else {
-										console.log("Successfully uploaded data to myBucket/myKey");
 										resolve('OK');
 									}
 								});
@@ -277,7 +255,6 @@ module.exports = {
 					})
 					.catch((err) => {
 						// something went terribly wrong!
-						console.log(err);
 						reject(err);
 					});
 			});
@@ -289,16 +266,13 @@ module.exports = {
 						// we got the updated char config back, update in S3
 						s3.createBucket({Bucket: fflogsExtensionBucket}, function(err, data) {
 							if (err) {
-								console.log(err);
 								reject(err);
 							} else {
 								let params = {Bucket: fflogsExtensionBucket, Key: channel_id, Body: JSON.stringify(updatedConfigObj)};
 								s3.putObject(params, function(err, data) {
 									if (err) {
-										console.log(err);
 										reject(err);
 									} else {
-										console.log("Successfully uploaded data to myBucket/myKey");
 										resolve('OK');
 									}
 								});
@@ -307,7 +281,6 @@ module.exports = {
 					})
 					.catch((err) => {
 						// something went terribly wrong!
-						console.log(err);
 						reject(err);
 					});
 			});

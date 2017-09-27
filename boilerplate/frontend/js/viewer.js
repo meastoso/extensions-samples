@@ -19,25 +19,28 @@ or in the "license" file accompanying this file. This file is distributed on an 
 let CHANNEL_ID = 0;
 
 const app = angular.module("viewerApp",['angularjs-gauge', 'ngMaterial']);
-app.controller("ViewerController", function($scope, $http, $compile, jobUtils, fflogsUtils) {
-	// initialize current configuration
-	console.log("loading authorized");
-	
+app.controller("ViewerController", function($scope, $http, $compile, $timeout, jobUtils, fflogsUtils) {
+	// initialize current configuration	
 	$scope.extensionOpen = false; // used to toggle extension view
 	$scope.toggleShow = function() {
 		$scope.extensionOpen = !$scope.extensionOpen;
 	}
+	$scope.charDataMap = {};
 	
 	$scope.showBody = false; // used to toggle body content
 	$scope.clickJob = function(jobStr, charStr, serverStr) {
-		console.log('got to clickJob with: ' + jobStr + ' ' + charStr + ' ' + serverStr);
-		// TODO: implement
 		$scope.showBody = true;
 		$(".job-char-server-wrapper").hide(); // hide all
-		$(".job-char-server-wrapper[data-job='" + jobStr + "'][data-char='" + charStr + "'][data-server='" + serverStr + "']").show();
+		$('.job-char-server-wrapper[data-job="' + jobStr + '"][data-char="' + charStr + '"][data-server="' + serverStr + '"]').show();
 		// job menus
 		$(".job-menu-small .char-jobs").hide();
-		$(".job-menu-small .char-jobs[data-char='" + charStr + "'][data-server='" + serverStr + "']").show();
+		$(".job-menu-small .char-jobs[data-char=\"" + charStr + "\"][data-server='" + serverStr + "']").show();
+		// animate the shown item
+		$timeout(function() {
+			// Format is: id="{{jobName}}-{{charName}}-{{serverName}}"
+			const charNameNoSpaces = charStr.replace(/\s/g, '').replace(/'/g, '');
+			angular.element('#' + jobStr + '-' + charNameNoSpaces + '-' + serverStr).triggerHandler('click');
+		});
 	}
 	
 	window.Twitch.ext.onAuthorized(function(auth) {
@@ -58,7 +61,6 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 				realmName: 'NA'
 			}
 		}).then(function successCallback(charSummary) {
-			console.log('initialization of getSummaries success');
 			if (Object.prototype.toString.call( charSummary ) === '[object Array]' ) {
 				// TODO: draw up this character's summary here
 				
@@ -68,14 +70,10 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 				// wrong character info or the character doesn't exist in fflogs
 				// TODO: show error message in view here
 			}
-			console.log(charSummary);
 		
 		}, function errorCallback(response) {
-			console.log('initialization of getConfig failed!');
-			console.log(response);
 			//$("#gettingCharDataLoading").hide();
 		});
-		console.log("viewer controller loaded ok!");
 	});
 	
 	// TODO: DELETE THIS AFTER TESTING WITHOUT THE STREAM ON
@@ -90,15 +88,7 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 			channelID: CHANNEL_ID
 		}
 		}).then(function successCallback(response) {
-			console.log('initialization of getChars success');
-			console.log(response);
 			const charArr = response.data;
-			// build character doms here
-			// first add main-page character blocks
-			// second add summary-jobs small-menu
-			// third call getSummaries for each char
-			//		- create body-content for each character-job combo of all characters
-			// for each character, go get the summaries and populate here
 			const getSummaryForCharURL = '/getSummaryForChar';
 			charArr.forEach(function(char) {
 				$http({
@@ -111,13 +101,13 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 					}
 				}).then(function successCallback(response) {
 					const charSummary = response.data;
-					console.log('initialization of getSummaries success');
 					if (Object.prototype.toString.call( charSummary ) === '[object Array]' ) {
-						// TODO: draw up this character's summary here
-						console.log('YES ITS AN ARRAY!');
+						const namePlusServer = char.name + '-' + char.server; // this is garbage don't ever do this again
+						$scope.charDataMap[namePlusServer] = charSummary;
 						
 						// draw char-panels, append job buttons based on summary
 						const jobArr = fflogsUtils.getJobArr(charSummary); // unique set of jobs for this character
+						$scope.charSummary = charSummary;
 						let jobArrGarbageVariable = '';
 						for (let i = 0; i < jobArr.length; i++) {
 							jobArrGarbageVariable = jobArrGarbageVariable + jobArr[i] + '-';
@@ -138,32 +128,25 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 						const charJobsSyntax = '<char-jobs char="' + char.name + '" server="' + char.server + '" jobs="' + jobArrGarbageVariable + '"></char-panel>';
 						let charJobs = $compile( charJobsSyntax )( $scope );
 						$('.job-menu-small').append(charJobs);
-						
-						
-						
-						
-						
-						
 					}
 					else {
 						// something went wrong fetching data from fflogs, maybe 
 						// wrong character info or the character doesn't exist in fflogs
-						// TODO: show error message in view here
-						console.log('NO! ITS NOT AN ARRAY!');
-						console.log(char);
-						// TODO: show "No FFLogs data for this character!" message
+						const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" fail="true" jobs=""></char-panel>';
+						let charPanel = $compile( charPanelSyntax )( $scope );
+						$('.characters-wrapper').append(charPanel);
 					}
-					console.log(charSummary);
 				
 				}, function errorCallback(response) {
-					console.log('initialization of getConfig failed!');
-					console.log(response);
-					//$("#gettingCharDataLoading").hide();
+					// something went wrong fetching data from fflogs, maybe 
+					// wrong character info or the character doesn't exist in fflogs
+					const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" fail="true" jobs=""></char-panel>';
+					let charPanel = $compile( charPanelSyntax )( $scope );
+					$('.characters-wrapper').append(charPanel);
 				});
 			});
 		}, function errorCallback(response) {
-			console.log('initialization of getChars failed!');
-			console.log(response);
+			// something went SUPER wrong here! Nothing to really show?
 		});
 })
 .directive('jobButton', function() {
@@ -178,7 +161,7 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 		}
 	};
 })
-.directive('summaryContent', function() {
+.directive('summaryContent', function(fflogsUtils) {
 	return {
 	    restrict: 'E',
 	    scope: true,
@@ -187,6 +170,31 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 	    	scope.jobName = attr.job;
 	    	scope.charName = attr.char;
 	    	scope.serverName = attr.server;
+	    	// build this specific directive's gauge objects
+	    	const namePlusServer = attr.char + '-' + attr.server;
+	    	const charSummary = scope.$parent.charDataMap[namePlusServer];
+	    	scope.summaryData = fflogsUtils.getSummaryForJob(attr.job, charSummary);
+	    	scope.threshold = {
+	    			'0': {color: '#aaa'}, /* grey */
+	    			'25': {color: 'rgb(30, 255, 0)'}, /* green */
+	    			'50': {color: 'rgb(0, 112, 255)'}, /* blue */
+	    			'75': {color: 'rgb(163, 53, 238)'}, /* purple */
+	    			'95': {color: 'rgb(255, 128, 0)'}, /* orange */
+	    			'99': {color: 'rgb(229, 204, 128)'} /* gold */
+			};
+	    	
+	    	scope.triggerAnimation = function() {
+	    		//const tempVal = parseInt(scope.summaryData[0].percentile) + 1;
+	    		//scope.summaryData[0].percentile = tempVal;
+	    		scope.summaryData.forEach(function(element) {
+	    			const tempVal = parseInt(element.percentileMinusOne) + 1;
+	    			element.displayPercentile = tempVal;
+	    		});
+	    	}
+	    	scope.getCharNameNoSpaces = function() {
+	    		const theChar = attr.char;
+	    		return theChar.replace(/\s/g, '').replace(/'/g, '');
+	    	}
 		}
 	};
 })
@@ -199,6 +207,9 @@ app.controller("ViewerController", function($scope, $http, $compile, jobUtils, f
 	    	scope.charName = attr.char;
 	    	scope.serverName = attr.server;
 	    	scope.jobsArr = attr.jobs.split('-');
+	    	if (attr.fail == 'true') {
+	    		scope.fail = true;
+	    	}
 		}
 	};
 }).directive('charJobs', function() {

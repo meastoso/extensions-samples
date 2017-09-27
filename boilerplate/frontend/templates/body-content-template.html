@@ -5,30 +5,11 @@
 		<div class="server">({{serverName}})</div>
 	</div>
 	<div class="body-summaries">
-		<div class="gauge-wrapper">
-			<div class="header">Alte Roite</div>
-			<ng-gauge size="130" type="arch" thick="10" min="0" max="120" value="68.2" cap="round" label="performance"
-				foreground-color="#ffcc66" background-color="#3d3d3d" append="%"></ng-gauge>
-		</div>
-		<div class="gauge-wrapper">
-			<div class="header">Alte Roite</div>
-			<ng-gauge size="130" type="arch" thick="10" min="0" max="120" value="68.2" cap="round" label="performance"
-				foreground-color="#ffcc66" background-color="#3d3d3d" append="%"></ng-gauge>
-		</div>
-		<div class="gauge-wrapper">
-			<div class="header">Alte Roite</div>
-			<ng-gauge size="130" type="arch" thick="10" min="0" max="120" value="68.2" cap="round" label="performance"
-				foreground-color="#ffcc66" background-color="#3d3d3d" append="%"></ng-gauge>
-		</div>
-		<div class="gauge-wrapper">
-			<div class="header">Alte Roite</div>
-			<ng-gauge size="130" type="arch" thick="10" min="0" max="120" value="68.2" cap="round" label="performance"
-				foreground-color="#ffcc66" background-color="#3d3d3d" append="%"></ng-gauge>
-		</div>
-		<div class="gauge-wrapper">
-			<div class="header">Alte Roite</div>
-			<ng-gauge size="130" type="arch" thick="10" min="0" max="120" value="68.2" cap="round" label="performance"
-				foreground-color="#ffcc66" background-color="#3d3d3d" append="%"></ng-gauge>
+		<div class="gauge-wrapper" ng-repeat="summary in summaryData">
+			<div class="header">{{::summary.encounter}}</div>
+			<ng-gauge size="130" type="arch" thick="10" min="0" max="100" value="summary.displayPercentile" cap="round" label="{{::summary.total}} DPS"
+				foreground-color="#ffcc66" background-color="#3d3d3d" thresholds="threshold" append="%"></ng-gauge>
 		</div>
 	</div>
+	<button id="{{jobName}}-{{getCharNameNoSpaces()}}-{{serverName}}" class="animation-trigger-button" ng-click="triggerAnimation()" style="display:none;">testing</button>
 </div>

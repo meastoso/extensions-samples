@@ -138,8 +138,22 @@ body::-webkit-scrollbar-thumb {
 }
 
 .characters-wrapper {
-	max-height: 300px;
+	max-height: 160px;
 	overflow-y: scroll;
+}
+
+.characters-wrapper::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background-color: hsla(0, 0%, 100%, .1)
+}
+
+.characters-wrapper::-webkit-scrollbar {
+    width: 5px
+}
+
+.characters-wrapper::-webkit-scrollbar-thumb {
+    background-color: hsla(0, 0%, 100%, .4);
+    border-radius: 3px
 }
 
 .char-wrapper {
@@ -185,13 +199,6 @@ body::-webkit-scrollbar-thumb {
 	display: flex;
 }
 
-.summary-wrapper,
-.recent-parses-wrapper {
-	border: 1px solid #3d3d3d;
-	padding: 10px;
-	z-index: 2;
-}
-
 .summary-wrapper {
 	border-radius: 5px 0px 0px 5px;
 }
@@ -221,27 +228,58 @@ body::-webkit-scrollbar-thumb {
 	width: 48px;
 }
 
-
-
-
+.no-fflogs-data {
+	color: red;
+	margin-left: 50px;
+}
 
 /* BODY SHOWN CSS RULES BELOW HERE */
+.summary-wrapper,
+.recent-parses-wrapper {
+	border: 1px solid #3d3d3d;
+	padding: 10px;
+	z-index: 2;
+	width: 300px;
+	height: 200px;
+}
+
 .summary-wrapper.body-show,
 .recent-parses-wrapper.body-show {
 	width: 50px;
+	height: 400px;
+}
+
+.transformable {
+	transition: all 0.5s ease-in;
 }
 
 .body-content {
-	width: 500px;
+	width: 0px;
+	height: 0px;
+	min-height: 0px;
 	border-top: 1px solid #3d3d3d;
 	border-bottom: 1px solid #3d3d3d;
+	overflow: hidden;
+}
+
+.body-content.body-show {
+	width: 500px;
+	height: 400px;
 	padding: 10px;
+	overflow: hidden;
 }
 
 .body-header {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	border-bottom: 1px solid #aaa;
+}
+
+.body-header md-icon {
+	margin: 0;
+	height: 50px;
+	width: 50px;
 }
 
 .body-header img {
@@ -292,12 +330,153 @@ body::-webkit-scrollbar-thumb {
 	display: none; /* shown via javascript */
 }
 
+.md-icon-button.summary-back {
+	border: none !important;
+}
 
 
+/* ###########################
+*		JOB BUTTONS!!
+   ########################### */ 
+/* ALL BUTTONS GET THIS */
+job-button .md-icon-button {
+	margin-bottom: 5px !important;
+}
+job-button .md-icon-button:hover {
+	background-color: #d9d9d9 !important;
+}
 
+.job-char-server-wrapper[data-job="PLD"] md-icon,
+job-button[job="PLD"] md-icon {
+	fill: #77A8C4;
+}
+job-button[job="PLD"] .md-icon-button,
+job-button[job="PLD"] .md-icon-button:hover {
+	border-color: #77A8C4 !important;
+}
 
+.job-char-server-wrapper[data-job="WAR"] md-icon,
+job-button[job="WAR"] md-icon {
+	fill: #B8101C;
+}
+job-button[job="WAR"] .md-icon-button,
+job-button[job="WAR"] .md-icon-button:hover {
+	border-color: #B8101C !important;
+}
 
+.job-char-server-wrapper[data-job="DRK"] md-icon,
+job-button[job="DRK"] md-icon {
+	fill: #3B1231;
+}
+job-button[job="DRK"] .md-icon-button,
+job-button[job="DRK"] .md-icon-button:hover {
+	border-color: #3B1231 !important;
+}
 
+.job-char-server-wrapper[data-job="BRD"] md-icon,
+job-button[job="BRD"] md-icon {
+	fill: #608629;
+}
+job-button[job="BRD"] .md-icon-button,
+job-button[job="BRD"] .md-icon-button:hover {
+	border-color: #608629 !important;
+}
 
+.job-char-server-wrapper[data-job="MCH"] md-icon,
+job-button[job="MCH"] md-icon {
+	fill: #2D9DAD;
+}
+job-button[job="MCH"] .md-icon-button,
+job-button[job="MCH"] .md-icon-button:hover {
+	border-color: #2D9DAD !important;
+}
 
+.job-char-server-wrapper[data-job="BLM"] md-icon,
+job-button[job="BLM"] md-icon {
+	fill: #8653C8;
+}
+job-button[job="BLM"] .md-icon-button,
+job-button[job="BLM"] .md-icon-button:hover {
+	border-color: #8653C8 !important;
+}
 
+.job-char-server-wrapper[data-job="RDM"] md-icon,
+job-button[job="RDM"] md-icon {
+	fill: #BB1953;
+}
+job-button[job="RDM"] .md-icon-button,
+job-button[job="RDM"] .md-icon-button:hover {
+	border-color: #BB1953 !important;
+}
+
+.job-char-server-wrapper[data-job="SMN"] md-icon,
+job-button[job="SMN"] md-icon {
+	fill: #40762B;
+}
+job-button[job="SMN"] .md-icon-button,
+job-button[job="SMN"] .md-icon-button:hover {
+	border-color: #40762B !important;
+}
+
+.job-char-server-wrapper[data-job="NIN"] md-icon,
+job-button[job="NIN"] md-icon {
+	fill: #D763BD;
+}
+job-button[job="NIN"] .md-icon-button,
+job-button[job="NIN"] .md-icon-button:hover {
+	border-color: #D763BD !important;
+}
+
+.job-char-server-wrapper[data-job="MNK"] md-icon,
+job-button[job="MNK"] md-icon {
+	fill: #E2A43E;
+}
+job-button[job="MNK"] .md-icon-button,
+job-button[job="MNK"] .md-icon-button:hover {
+	border-color: #E2A43E !important;
+}
+
+.job-char-server-wrapper[data-job="DRG"] md-icon,
+job-button[job="DRG"] md-icon {
+	fill: #4A5EB5;
+}
+job-button[job="DRG"] .md-icon-button,
+job-button[job="DRG"] .md-icon-button:hover {
+	border-color: #4A5EB5 !important;
+}
+
+.job-char-server-wrapper[data-job="SAM"] md-icon,
+job-button[job="SAM"] md-icon {
+	fill: #EE8452;
+}
+job-button[job="SAM"] .md-icon-button,
+job-button[job="SAM"] .md-icon-button:hover {
+	border-color: #EE8452 !important;
+}
+
+.job-char-server-wrapper[data-job="AST"] md-icon,
+job-button[job="AST"] md-icon {
+	fill: #D97E36;
+}
+job-button[job="AST"] .md-icon-button,
+job-button[job="AST"] .md-icon-button:hover {
+	border-color: #D97E36 !important;
+}
+
+.job-char-server-wrapper[data-job="WHM"] md-icon,
+job-button[job="WHM"] md-icon {
+	fill: #9E8F6C;
+}
+job-button[job="WHM"] .md-icon-button,
+job-button[job="WHM"] .md-icon-button:hover {
+	border-color: #9E8F6C !important;
+}
+
+.job-char-server-wrapper[data-job="SCH"] md-icon,
+job-button[job="SCH"] md-icon {
+	fill: #4746A1;
+}
+job-button[job="SCH"] .md-icon-button,
+job-button[job="SCH"] .md-icon-button:hover {
+	border-color: #4746A1 !important;
+}

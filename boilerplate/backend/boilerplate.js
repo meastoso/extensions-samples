@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 })); 
 
 app.use((req, res, next) => {
-  console.log('Got request', req.path, req.method);
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
   res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, POST');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,11 +43,8 @@ app.get('/getSummaryForChar', function (req, res) {
 	fflogsUtils.getSummaryForChar(parsedChar)
 		.then((summaryArr) => {
 			res.send(summaryArr);
-			console.log('returning summaryArr data');
-			console.log(summaryArr);
 		})
 		.catch((err) => {
-			console.error(err);
 			res.status(500).send('ERROR: ' + err);
 		});
 	
@@ -62,19 +58,14 @@ app.post('/addChar', function (req, res) {
 			s3Utils.addChar(channel_id, parsedChar)
 			.then((data) => {
 				res.send(parsedChar);
-				console.log('returning parsedChar data');
-				console.log(data);
 			})
 			.catch((err) => {
-				console.error(err);
 				res.status(500).send('ERROR: ' + err);
 			});
 		})
 		.catch((err) => {
-			console.error(err);
 			res.status(500).send('ERROR: ' + err);
 		});
-	console.log('finished addChar function');
 });
 
 app.post('/deleteChar', function (req, res) {
@@ -90,26 +81,20 @@ app.post('/deleteChar', function (req, res) {
 	s3Utils.deleteChar(channel_id, parsedChar)
 		.then((data) => {
 			res.send(parsedChar);
-			console.log('returning parsedChar data');
-			console.log(data);
 		})
 		.catch((err) => {
-			console.error(err);
+			// something went SUPER wrong
 		});
-	//res.status(500).send('ERROR: Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com')
 });
 
 app.get('/getChars', function (req, res) {
 	const channel_id = req.query.channelID;
-	console.log('express getting chars for channel_id: ' + channel_id);
 	s3Utils.getChars(channel_id)
 		.then((data) => {
 			res.send(data); // array of characters; empty if no config yet
-			console.log('returning getConfig data');
-			console.log(data); // data should be array of characters
 		})
 		.catch((err) => {
-			console.error(err);
+			// something went super wrong, should return empty array if no chars
 		});
 });
 
@@ -120,5 +105,5 @@ let options = {
 
 const PORT = 8080;
 https.createServer(options, app).listen(PORT, function () {
-  console.log('Extension Boilerplate service running on https', PORT);
+	// server running
 });

@@ -16,8 +16,20 @@ angular.module('viewerApp').service('jobUtils', function() {
     		14: "RDM",
     		15: "SAM"
     }
+    // create inverse map for faster lookups
+    const specMap = {};
+    for (let spec in jobMap) {
+	    if (jobMap.hasOwnProperty(spec)) {
+	    	//jobArr.push(jobUtils.getJobAcronymFromSpec(spec));
+	    	specMap[jobMap[spec]] = spec;
+	    }
+	}
     
     this.getJobAcronymFromSpec = function(fflogsJobSpec) {
     	return jobMap[fflogsJobSpec];
+    }
+    
+    this.getSpecFromJobAcronym = function(fflogsJobAcronym) {
+    	return specMap[fflogsJobAcronym];
     }
 });

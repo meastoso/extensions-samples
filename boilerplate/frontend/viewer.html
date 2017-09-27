@@ -21,6 +21,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <link rel="stylesheet" href="css/resources/angular-material.css">
         <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/viewer.css">
+        <script src="js/resources/jquery-3.2.1.min.js"></script>
         <script src="js/resources/angular.min.js"></script>
         <script src="js/resources/angular-animate.min.js"></script>
         <script src="js/resources/angular-aria.min.js"></script>
@@ -29,12 +30,13 @@ or in the "license" file accompanying this file. This file is distributed on an 
     <body ng-app="viewerApp">
     	<div id="extension" ng-controller="ViewerController">
     		<div class="fflogs-wrapper">
-    			<div class="fflogs-main-container" ng-show="extensionOpen">
-    				<div class="summary-wrapper ng-class:{ 'body-show': showBody };">
+    			<div class="fflogs-main-container transformable" ng-show="extensionOpen">
+    				<div class="summary-wrapper transformable ng-class:{ 'body-show': showBody };">
     					<h1 ng-show="!showBody">FFLogs Summaries</h1>
-    					<div class="summary-back" ng-click="showBody = false" ng-show="showBody">
-    						<span>BACK</span>
-    					</div>
+    					<!-- <div class="summary-back" ng-click="showBody = false" ng-show="showBody"> -->
+   						<md-button class="md-icon-button summary-back" ng-click="showBody = false" ng-show="showBody">
+							<md-icon md-svg-icon="images/go-back.svg"></md-icon>
+						</md-button>
     					<div class="job-menu-small" ng-show="showBody">
     						<!-- populated by controller on start-up -->
       						<!-- TODO: Job badge icons for border/fill colors:
@@ -44,10 +46,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
     						<!-- populated by controller on start-up -->
     					</div>
     				</div>
-   					<div class="body-content" ng-show="showBody">
+   					<div class="body-content transformable ng-class:{ 'body-show': showBody };">
    						<!-- populated by controller on start-up -->
     				</div>
-    				<div class="recent-parses-wrapper ng-class:{ 'body-show': showBody };">
+    				<div class="recent-parses-wrapper transformable ng-class:{ 'body-show': showBody };">
     					<h1 ng-show="!showBody">Recent Parses</h1>
     					<div class="coming-soon">
     						<div ng-show="showBody">Recent Parses</div>
@@ -63,11 +65,11 @@ or in the "license" file accompanying this file. This file is distributed on an 
     		</div>
         </div>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-        <script src="js/resources/jquery-3.2.1.min.js"></script>
         <script src="js/resources/angularjs-gauge.js"></script>
         <script src="js/common.js"></script>
         <script src="js/viewer.js"></script>
         <script src="js/jobUtils.js"></script>
         <script src="js/fflogsUtils.js"></script>
+        <script src="js/encounterUtils.js"></script>
     </body>
 </html>

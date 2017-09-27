@@ -17,7 +17,6 @@ const parseCharacterData = function(lodestoneURL) {
 		request(lodestoneURL, function (error, response, html) {
 			const failMsg = "Could not parse URL. Please ensure correct URL and try again or contact meastoso@gmail.com";
 			if (!error && response.statusCode == 200) {
-				console.log('got success back from the lodestoneURL!');
 				var $ = cheerio.load(html);
 				const name = $(".frame__chara__box p.frame__chara__name").text();
 				const server = $(".frame__chara__box p.frame__chara__world").text();
@@ -30,8 +29,6 @@ const parseCharacterData = function(lodestoneURL) {
 					server: server,
 					realm: realmName
 				};
-				console.log("resolving parseCharacterData function with parsedChar:");
-				console.log(parsedChar);
 				resolve(parsedChar);
 			}
 			else {

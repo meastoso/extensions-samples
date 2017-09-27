@@ -61,8 +61,6 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 			}
 		}).then(function successCallback(response) {
 			$("#gettingCharDataLoading").hide();
-			console.log('initialization of getConfig success');
-			console.log(response);
 			const charArr = response.data;
 			// build character doms here
 			if (charArr == undefined || charArr == null || charArr.length < 1) {
@@ -82,8 +80,6 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 			}
 		
 		}, function errorCallback(response) {
-			console.log('initialization of getConfig failed!');
-			console.log(response);
 			$("#gettingCharDataLoading").hide();
 		});
 	});
@@ -106,7 +102,6 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 	    template: '<a ng-click="deleteCharacter()"><img src="images/trash_icon.png"></a>',
 	    controller: function ( $scope, $element, $http ) {
 	    	$scope.deleteCharacter = function () {
-	    		console.log('clicked delete!');
 	    		const charElement = $element.closest("character");
 	    		const charName = $(charElement).attr("name");
 	    		const serverName = $(charElement).attr("server");
@@ -119,13 +114,9 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 	    			data: $.param({channelID: CHANNEL_ID, name: charName, server: serverName, realm: realm}),
 	    			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	    		}).then(function successCallback(response) {
-	    			console.log('success');
 	    			charElement.remove();
-		        	
 	    		}, function errorCallback(response) {
-	    		    console.log('failed!');
-	    		    //$('.error').text(response.data);
-	    		    //$("#addCharLoadingImg").hide();
+	    			// TODO: show failure message (SHOULDNT HAPPEN)
 	    		});
 	    		// TODO: check if no characters left after deletion and show no-chars div
 	      };
@@ -141,7 +132,6 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 	    	$scope.addCharacter = function () {
 	    		$("#addCharLoadingImg").show();
 	    		$('.error').text(""); // clear input upon new attempt
-	    		console.log('clicked attribute');
 	    		const url = '/addChar';
 	    		$http({
 	    			method: 'POST',
@@ -149,7 +139,6 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 	    			data: $.param({channelID: CHANNEL_ID, lodestoneURL: $("#lodestoneURL").val()}),
 	    			headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 	    		}).then(function successCallback(response) {
-	    			console.log('success');
 	    			$(".no-chars-div").hide();
 	    			const charName = response.data.name;
 		        	const serverName = response.data.server;
@@ -160,7 +149,6 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 		        	$("#addCharLoadingImg").hide();
 		        	
 	    		}, function errorCallback(response) {
-	    		    console.log('failed!');
 	    		    $('.error').text(response.data);
 	    		    $("#addCharLoadingImg").hide();
 	    		});
