@@ -31,7 +31,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
 const AWS = require('aws-sdk');
 //load AWS config from file
 //NOTE: Could not figure out how to load proper environment details in docker
-AWS.config.loadFromPath('/boilerplate/backend/credentials'); 
+AWS.config.loadFromPath('./credentials'); 
 const s3 = new AWS.S3();
 const fflogsExtensionBucket = 'meastoso-ffxiv-fflogs-extension-bucket';
 
@@ -88,8 +88,11 @@ const getConfig = function(channel_id) {
 		let params = {Bucket: fflogsExtensionBucket, Key: channel_id};
 		s3.getObject(params, function(err, data) {
 			if (err) {
+				console.log('failed TO GET STUff!!');
+				console.log(err);
 				reject(err);
 			} else {
+				console.log('GOT STUFF FROM s31');
 				resolve(JSON.parse(data.Body.toString()));
 			}
 		});

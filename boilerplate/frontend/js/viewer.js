@@ -26,6 +26,7 @@ app.controller("ViewerController", function($scope, $http, $compile, $timeout, j
 		$scope.extensionOpen = !$scope.extensionOpen;
 	}
 	$scope.charDataMap = {};
+	const baseURL = "http://meastoso.us-east-1.elasticbeanstalk.com";
 	
 	$scope.showBody = false; // used to toggle body content
 	$scope.clickJob = function(jobStr, charStr, serverStr) {
@@ -52,7 +53,7 @@ app.controller("ViewerController", function($scope, $http, $compile, $timeout, j
 		// initialize current configuration
 		// TODO loop for each character
 		// first get all the characters configured by this channel
-		const getCharsURL = '/getChars';
+		const getCharsURL = baseURL + '/getChars';
 		$http({
 			url : getCharsURL,
 			method : "GET",
@@ -61,7 +62,7 @@ app.controller("ViewerController", function($scope, $http, $compile, $timeout, j
 			}
 			}).then(function successCallback(response) {
 				const charArr = response.data;
-				const getSummaryForCharURL = '/getSummaryForChar';
+				const getSummaryForCharURL = baseURL + '/getSummaryForChar';
 				charArr.forEach(function(char) {
 					$http({
 						url : getSummaryForCharURL,

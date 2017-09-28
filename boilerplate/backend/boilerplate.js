@@ -8,8 +8,8 @@ or in the "license" file accompanying this file. This file is distributed on an 
 */
 
 const express = require('express');
-const fs = require('fs');
-const https = require('https');
+//const fs = require('fs');
+//const https = require('https');
 const s3Utils = require('./s3/s3Utils.js');
 const loadestoneParser = require('./parser/lodestoneParser.js');
 const fflogsUtils = require('./fflogs/fflogsUtils.js');
@@ -98,12 +98,15 @@ app.get('/getChars', function (req, res) {
 		});
 });
 
-let options = {
+/*let options = {
    key  : fs.readFileSync('/boilerplate/certs/testing.key'),
    cert : fs.readFileSync('/boilerplate/certs/testing.crt')
 };
-
 const PORT = 8080;
 https.createServer(options, app).listen(PORT, function () {
 	// server running
+});*/
+let port = process.env.PORT || 3000;
+let server = app.listen(port, function () {
+    console.log('Server running at http://127.0.0.1:' + port + '/');
 });

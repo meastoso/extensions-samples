@@ -43,7 +43,7 @@ let CHANNEL_ID = 0;
 const app = angular.module("configApp",[]);
 app.controller("ConfigController", function($scope, $http, $compile) {
 	// initialize current configuration
-	
+	const baseURL = "http://meastoso.us-east-1.elasticbeanstalk.com";
 	window.Twitch.ext.onAuthorized(function(auth) {
 		var parts = auth.token.split(".");
 		var payload = JSON.parse(window.atob(parts[1]));
@@ -52,7 +52,7 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 		}
 		// initialize current configuration
 		$("#gettingCharDataLoading").show();
-		const url = '/getChars';
+		const url = baseURL + '/getChars';
 		$http({
 			url : url,
 			method : "GET",
@@ -107,7 +107,7 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 	    		const serverName = $(charElement).attr("server");
 	    		const realm = $(charElement).attr("realm");
 	    		$(charElement).find(".char-wrapper").addClass("greyed-out");
-	    	  	const url = '/deleteChar';
+	    	  	const url = baseURL + '/deleteChar';
 	    		$http({
 	    			method: 'POST',
 	    			url: url,
@@ -132,7 +132,7 @@ app.controller("ConfigController", function($scope, $http, $compile) {
 	    	$scope.addCharacter = function () {
 	    		$("#addCharLoadingImg").show();
 	    		$('.error').text(""); // clear input upon new attempt
-	    		const url = '/addChar';
+	    		const url = baseURL + '/addChar';
 	    		$http({
 	    			method: 'POST',
 	    			url: url,
