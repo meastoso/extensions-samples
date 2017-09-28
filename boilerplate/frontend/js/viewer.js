@@ -17,6 +17,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
 //GLOBAL VARIABLES
 //NOTE: NORMALLY I THINK THIS IS GARBAGE BUT I WANT TO FINISH THIS PROJECT
 let CHANNEL_ID = 0;
+const baseURL = "https://twitch.meastoso-backend.com";
 
 const app = angular.module("viewerApp",['angularjs-gauge', 'ngMaterial']);
 app.controller("ViewerController", function($scope, $http, $compile, $timeout, jobUtils, fflogsUtils) {
@@ -26,7 +27,6 @@ app.controller("ViewerController", function($scope, $http, $compile, $timeout, j
 		$scope.extensionOpen = !$scope.extensionOpen;
 	}
 	$scope.charDataMap = {};
-	const baseURL = "http://meastoso.us-east-1.elasticbeanstalk.com";
 	
 	$scope.showBody = false; // used to toggle body content
 	$scope.clickJob = function(jobStr, charStr, serverStr) {

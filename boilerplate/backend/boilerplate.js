@@ -42,9 +42,12 @@ app.get('/getSummaryForChar', function (req, res) {
 	};
 	fflogsUtils.getSummaryForChar(parsedChar)
 		.then((summaryArr) => {
+			console.log('successfully retrieved getSummaryForChar with charName: ' + charName);
 			res.send(summaryArr);
 		})
 		.catch((err) => {
+			console.log('Failed to retrieved getSummaryForChar with charName: ' + charName);
+			console.log(err);
 			res.status(500).send('ERROR: ' + err);
 		});
 	
@@ -57,13 +60,18 @@ app.post('/addChar', function (req, res) {
 		.then((parsedChar) => {
 			s3Utils.addChar(channel_id, parsedChar)
 			.then((data) => {
+				console.log('Successfully posted addChar with channel_id: ' + channel_id);
 				res.send(parsedChar);
 			})
 			.catch((err) => {
+				console.log('Failed to post addChar with channel_id: ' + channel_id);
+				console.log(err);
 				res.status(500).send('ERROR: ' + err);
 			});
 		})
 		.catch((err) => {
+			console.log('Failed to post addChar with channel_id: ' + channel_id);
+			console.log(err);
 			res.status(500).send('ERROR: ' + err);
 		});
 });
@@ -80,10 +88,13 @@ app.post('/deleteChar', function (req, res) {
 	}
 	s3Utils.deleteChar(channel_id, parsedChar)
 		.then((data) => {
+			console.log('deleted character ok!');
 			res.send(parsedChar);
 		})
 		.catch((err) => {
 			// something went SUPER wrong
+			console.log('something went wrong deleting char!');
+			console.log(err);
 		});
 });
 

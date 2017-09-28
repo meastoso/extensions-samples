@@ -39,11 +39,11 @@ $( document ).ready(function() {
 //GLOBAL VARIABLES
 //NOTE: NORMALLY I THINK THIS IS GARBAGE BUT I WANT TO FINISH THIS PROJECT
 let CHANNEL_ID = 0;
+const baseURL = "https://twitch.meastoso-backend.com";
 
 const app = angular.module("configApp",[]);
 app.controller("ConfigController", function($scope, $http, $compile) {
 	// initialize current configuration
-	const baseURL = "http://meastoso.us-east-1.elasticbeanstalk.com";
 	window.Twitch.ext.onAuthorized(function(auth) {
 		var parts = auth.token.split(".");
 		var payload = JSON.parse(window.atob(parts[1]));
