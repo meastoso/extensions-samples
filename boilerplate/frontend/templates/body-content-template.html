@@ -7,7 +7,7 @@
 	<div class="body-summaries">
 		<div class="gauge-wrapper" ng-repeat="summary in summaryData">
 			<div class="header">{{::summary.encounter}}</div>
-			<ng-gauge size="130" type="arch" thick="10" min="0" max="100" value="summary.displayPercentile" cap="round" label="{{::summary.total}} DPS"
+			<ng-gauge size="80" type="arch" thick="10" min="0" max="100" value="summary.displayPercentile" cap="round" label="{{::summary.total}} DPS"
 				foreground-color="#ffcc66" background-color="#3d3d3d" thresholds="threshold" append="%"></ng-gauge>
 		</div>
 	</div>
