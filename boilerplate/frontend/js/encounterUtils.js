@@ -1,5 +1,4 @@
 angular.module('viewerApp').service('encounterUtils', function() {
-    console.log('encounterUtils loaded');
     const encounterMap = {
     		42: "Alte Roite",
     		43: "Catastrophe",
