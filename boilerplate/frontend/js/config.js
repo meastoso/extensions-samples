@@ -38,51 +38,55 @@ $( document ).ready(function() {
 
 //GLOBAL VARIABLES
 //NOTE: NORMALLY I THINK THIS IS GARBAGE BUT I WANT TO FINISH THIS PROJECT
-let CHANNEL_ID = 0;
+let CHANNEL_ID = 117639292;
+//let CHANNEL_ID = 0;
 const baseURL = "https://twitch.meastoso-backend.com";
 
 const app = angular.module("configApp",[]);
 app.controller("ConfigController", function($scope, $http, $compile) {
 	// initialize current configuration
-	window.Twitch.ext.onAuthorized(function(auth) {
+	/*window.Twitch.ext.onAuthorized(function(auth) {
 		var parts = auth.token.split(".");
 		var payload = JSON.parse(window.atob(parts[1]));
 		if (payload.channel_id) {
 			CHANNEL_ID = payload.channel_id;
+		}*/
+		// initialize current configuration if it hasn't been loaded yet
+		// NOTE: Sometimes twitch reloads JS resources when user returns to tab
+		if (!$('character').length) {
+			$("#gettingCharDataLoading").show();
+			const url = baseURL + '/getChars';
+			$http({
+				url : url,
+				method : "GET",
+				params : {
+					channelID: CHANNEL_ID
+				}
+			}).then(function successCallback(response) {
+				$("#gettingCharDataLoading").hide();
+				const charArr = response.data;
+				// build character doms here
+				if (charArr == undefined || charArr == null || charArr.length < 1) {
+					// no config yet, show minimum characters message
+					$(".no-chars-div").show();
+				}
+				else {
+					// use charArr and build DOM
+					charArr.forEach(function(element) {
+						const charName = element.name;
+			        	const serverName = element.server;
+			        	const realm = element.realm;
+			        	const newCharacterSyntax = '<character name="' + charName + '" server="' + serverName + '" realm="' + realm + '"></character>';
+			        	const el = $compile( newCharacterSyntax )( $scope );
+			        	$('.characters-wrapper').append(el);
+					});
+				}
+			
+			}, function errorCallback(response) {
+				$("#gettingCharDataLoading").hide();
+			});
 		}
-		// initialize current configuration
-		$("#gettingCharDataLoading").show();
-		const url = baseURL + '/getChars';
-		$http({
-			url : url,
-			method : "GET",
-			params : {
-				channelID: CHANNEL_ID
-			}
-		}).then(function successCallback(response) {
-			$("#gettingCharDataLoading").hide();
-			const charArr = response.data;
-			// build character doms here
-			if (charArr == undefined || charArr == null || charArr.length < 1) {
-				// no config yet, show minimum characters message
-				$(".no-chars-div").show();
-			}
-			else {
-				// use charArr and build DOM
-				charArr.forEach(function(element) {
-					const charName = element.name;
-		        	const serverName = element.server;
-		        	const realm = element.realm;
-		        	const newCharacterSyntax = '<character name="' + charName + '" server="' + serverName + '" realm="' + realm + '"></character>';
-		        	const el = $compile( newCharacterSyntax )( $scope );
-		        	$('.characters-wrapper').append(el);
-				});
-			}
-		
-		}, function errorCallback(response) {
-			$("#gettingCharDataLoading").hide();
-		});
-	});
+	//});
 })
 .directive('character', function() {
 	return {

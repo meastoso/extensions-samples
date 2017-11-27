@@ -11,9 +11,14 @@ angular.module('viewerApp').service('encounterUtils', function() {
     	return encounterMap[id];
     }
     
-    this.getPercentile = function(rank, outOf) {
+    /*this.getPercentile = function(rank, outOf) {
     	const percentage = (rank / outOf) * 100;
     	const percentile = Math.round(100 - percentage) - 1; // 98% is GOOD (i.e. low rank)
+    	// NOTE: OFFSET BY -1 AND ADD IT WHEN THE VIEW IS SHOWN SO ANIMATION IS TRIGGERED ON GAUGES!
+    	return percentile;
+    }*/
+    this.getPercentile = function(historicalPercentage) {
+    	const percentile = parseInt(historicalPercentage) - 1; // 98% is GOOD (i.e. low rank)
     	// NOTE: OFFSET BY -1 AND ADD IT WHEN THE VIEW IS SHOWN SO ANIMATION IS TRIGGERED ON GAUGES!
     	return percentile;
     }

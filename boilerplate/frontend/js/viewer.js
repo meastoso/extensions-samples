@@ -16,8 +16,12 @@ or in the "license" file accompanying this file. This file is distributed on an 
 
 //GLOBAL VARIABLES
 //NOTE: NORMALLY I THINK THIS IS GARBAGE BUT I WANT TO FINISH THIS PROJECT
-let CHANNEL_ID = 0;
-const baseURL = "https://twitch.meastoso-backend.com";
+
+
+let CHANNEL_ID = 117639292;
+//let CHANNEL_ID = 0;
+//const baseURL = "https://twitch.meastoso-backend.com";
+const baseURL = "http://127.0.0.1:3000"
 
 const app = angular.module("viewerApp",['angularjs-gauge', 'ngMaterial']);
 app.controller("ViewerController", function($scope, $http, $compile, $timeout, jobUtils, fflogsUtils) {
@@ -44,84 +48,85 @@ app.controller("ViewerController", function($scope, $http, $compile, $timeout, j
 		});
 	}
 	
-	window.Twitch.ext.onAuthorized(function(auth) {
+	/*window.Twitch.ext.onAuthorized(function(auth) {
 		var parts = auth.token.split(".");
 		var payload = JSON.parse(window.atob(parts[1]));
 		if (payload.channel_id) {
 			CHANNEL_ID = payload.channel_id;
-		}
-		// initialize current configuration
-		// TODO loop for each character
+		}*/
 		// first get all the characters configured by this channel
-		const getCharsURL = baseURL + '/getChars';
-		$http({
-			url : getCharsURL,
-			method : "GET",
-			params : {
-				channelID: CHANNEL_ID
-			}
-			}).then(function successCallback(response) {
-				const charArr = response.data;
-				const getSummaryForCharURL = baseURL + '/getSummaryForChar';
-				charArr.forEach(function(char) {
-					$http({
-						url : getSummaryForCharURL,
-						method : "GET",
-						params : {
-							charName: char.name,
-							serverName: char.server,
-							realmName: char.realm
-						}
-					}).then(function successCallback(response) {
-						if (response !== undefined && response.data !== undefined && response.data.length > 0 && Object.prototype.toString.call( response.data ) === '[object Array]' ) {
-							const charSummary = response.data;
-							const namePlusServer = char.name + '-' + char.server; // this is garbage don't ever do this again
-							$scope.charDataMap[namePlusServer] = charSummary;
-							
-							// draw char-panels, append job buttons based on summary
-							const jobArr = fflogsUtils.getJobArr(charSummary); // unique set of jobs for this character
-							$scope.charSummary = charSummary;
-							let jobArrGarbageVariable = '';
-							for (let i = 0; i < jobArr.length; i++) {
-								jobArrGarbageVariable = jobArrGarbageVariable + jobArr[i] + '-';
+		// NOTE: Only do this if the char-panel DOM element doesn't exist yet, sometimes twitch reloads js resources when user returns to tab
+		if (!$('char-panel').length) {
+			const getCharsURL = baseURL + '/getChars';
+			$http({
+				url : getCharsURL,
+				method : "GET",
+				params : {
+					channelID: CHANNEL_ID
+				}
+				}).then(function successCallback(response) {
+					const charArr = response.data;
+					const getSummaryForCharURL = baseURL + '/getSummaryForChar';
+					charArr.forEach(function(char) {
+						$http({
+							url : getSummaryForCharURL,
+							method : "GET",
+							params : {
+								charName: char.name,
+								serverName: char.server,
+								realmName: char.realm
 							}
-							jobArrGarbageVariable = jobArrGarbageVariable.slice(0, -1);
-							const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" jobs="' + jobArrGarbageVariable + '"></char-panel>';
-							let charPanel = $compile( charPanelSyntax )( $scope );
-							$('.characters-wrapper').append(charPanel);
-							
-							// draw body-content for each job/char combo
-							for (let i = 0; i < jobArr.length; i++) {
-								const summaryContentSyntax = '<summary-content job="' + jobArr[i] + '" char="' + char.name + '" server="' + char.server + '"></summary-content>';
-								const summaryContent = $compile( summaryContentSyntax )( $scope );
-								$('.body-content').append(summaryContent);
+						}).then(function successCallback(response) {
+							if (response !== undefined && response.data !== undefined && response.data.length > 0 && Object.prototype.toString.call( response.data ) === '[object Array]' ) {
+								const charSummary = response.data;
+								const namePlusServer = char.name + '-' + char.server; // this is garbage don't ever do this again
+								$scope.charDataMap[namePlusServer] = charSummary;
+								
+								// draw char-panels, append job buttons based on summary
+								const jobArr = fflogsUtils.getJobArr(charSummary); // unique set of jobs for this character
+								$scope.charSummary = charSummary;
+								let jobArrGarbageVariable = '';
+								for (let i = 0; i < jobArr.length; i++) {
+									jobArrGarbageVariable = jobArrGarbageVariable + jobArr[i] + '-';
+								}
+								jobArrGarbageVariable = jobArrGarbageVariable.slice(0, -1);
+								const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" jobs="' + jobArrGarbageVariable + '"></char-panel>';
+								let charPanel = $compile( charPanelSyntax )( $scope );
+								$('.characters-wrapper').append(charPanel);
+								
+								// draw body-content for each job/char combo
+								for (let i = 0; i < jobArr.length; i++) {
+									const summaryContentSyntax = '<summary-content job="' + jobArr[i] + '" char="' + char.name + '" server="' + char.server + '"></summary-content>';
+									const summaryContent = $compile( summaryContentSyntax )( $scope );
+									$('.body-content').append(summaryContent);
+								}
+								
+								// draw "small" jobs left-menu
+								const charJobsSyntax = '<char-jobs char="' + char.name + '" server="' + char.server + '" jobs="' + jobArrGarbageVariable + '"></char-panel>';
+								let charJobs = $compile( charJobsSyntax )( $scope );
+								$('.job-menu-small').append(charJobs);
 							}
-							
-							// draw "small" jobs left-menu
-							const charJobsSyntax = '<char-jobs char="' + char.name + '" server="' + char.server + '" jobs="' + jobArrGarbageVariable + '"></char-panel>';
-							let charJobs = $compile( charJobsSyntax )( $scope );
-							$('.job-menu-small').append(charJobs);
-						}
-						else {
+							else {
+								// something went wrong fetching data from fflogs, maybe 
+								// wrong character info or the character doesn't exist in fflogs
+								const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" fail="true" jobs=""></char-panel>';
+								let charPanel = $compile( charPanelSyntax )( $scope );
+								$('.characters-wrapper').append(charPanel);
+							}
+						
+						}, function errorCallback(response) {
 							// something went wrong fetching data from fflogs, maybe 
 							// wrong character info or the character doesn't exist in fflogs
 							const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" fail="true" jobs=""></char-panel>';
 							let charPanel = $compile( charPanelSyntax )( $scope );
 							$('.characters-wrapper').append(charPanel);
-						}
-					
-					}, function errorCallback(response) {
-						// something went wrong fetching data from fflogs, maybe 
-						// wrong character info or the character doesn't exist in fflogs
-						const charPanelSyntax = '<char-panel char="' + char.name + '" server="' + char.server + '" fail="true" jobs=""></char-panel>';
-						let charPanel = $compile( charPanelSyntax )( $scope );
-						$('.characters-wrapper').append(charPanel);
+						});
 					});
+				}, function errorCallback(response) {
+					// something went SUPER wrong here! Nothing to really show?
 				});
-			}, function errorCallback(response) {
-				// something went SUPER wrong here! Nothing to really show?
-			});
-	});
+			}
+	//});
 })
 .directive('jobButton', function() {
 	return {

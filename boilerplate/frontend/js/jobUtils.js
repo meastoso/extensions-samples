@@ -1,5 +1,5 @@
 angular.module('viewerApp').service('jobUtils', function() {
-    const jobMap = {
+    /*const jobMap = {
     		1: "AST",
     		2: "BRD",
     		3: "BLM",
@@ -15,18 +15,35 @@ angular.module('viewerApp').service('jobUtils', function() {
     		13: "WHM",
     		14: "RDM",
     		15: "SAM"
-    }
+    };*/
+    const jobNameMap = {
+    		"Astrologian": "AST",
+    		"Bard": "BRD",
+    		"BlackMage": "BLM",
+    		"DarkKnight": "DRK",
+    		"Dragoon": "DRG",
+    		"Machinist": "MCH",
+    		"Monk": "MNK",
+    		"Ninja": "NIN",
+    		"Paladin": "PLD",
+    		"Scholar": "SCH",
+    		"Summoner": "SMN",
+    		"Warrior": "WAR",
+    		"WhiteMage": "WHM",
+    		"RedMage": "RDM",
+    		"Samurai": "SAM"
+    };
     // create inverse map for faster lookups
     const specMap = {};
-    for (let spec in jobMap) {
-	    if (jobMap.hasOwnProperty(spec)) {
+    for (let spec in jobNameMap) {
+	    if (jobNameMap.hasOwnProperty(spec)) {
 	    	//jobArr.push(jobUtils.getJobAcronymFromSpec(spec));
-	    	specMap[jobMap[spec]] = spec;
+	    	specMap[jobNameMap[spec]] = spec;
 	    }
 	}
     
     this.getJobAcronymFromSpec = function(fflogsJobSpec) {
-    	return jobMap[fflogsJobSpec];
+    	return jobNameMap[fflogsJobSpec];
     }
     
     this.getSpecFromJobAcronym = function(fflogsJobAcronym) {

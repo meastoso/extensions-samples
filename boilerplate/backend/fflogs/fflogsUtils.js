@@ -11,7 +11,9 @@ const Client = require('node-rest-client').Client;
 const client = new Client();
 const getSummaryForChar = function(parsedChar) {
 	return new Promise((resolve, reject) => {
-		const url = "https://www.fflogs.com/v1/rankings/character/" + parsedChar.name + "/" + parsedChar.server + "/" + parsedChar.realm + "?api_key=69877c577f4d83c07746b20a5ebb6e1c";
+		const url = "https://www.fflogs.com/v1/parses/character/" + parsedChar.name + "/" + parsedChar.server + "/" + parsedChar.realm + "?api_key=69877c577f4d83c07746b20a5ebb6e1c";
+		console.log('url being used is:');
+		console.log(url);
 		client.get(url, function (data, response) {
 		    resolve(data);
 		});

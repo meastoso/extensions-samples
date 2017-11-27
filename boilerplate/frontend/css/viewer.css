@@ -161,7 +161,7 @@ body::-webkit-scrollbar-thumb {
 	border-radius: 5px;
 	padding: 5px;
 	margin-bottom: 10px;
-	width: 180px;
+	width: 172px;
 }
 
 .char-data {
@@ -186,6 +186,7 @@ body::-webkit-scrollbar-thumb {
 	display: flex;
 	justify-content: space-evenly;
 	margin-top: 10px;
+	flex-wrap: wrap;
 }
 
 .header-desc {
@@ -251,7 +252,7 @@ body::-webkit-scrollbar-thumb {
 .summary-wrapper,
 .recent-parses-wrapper {
 	border: 1px solid #3d3d3d;
-	padding: 10px;
+	padding-top: 5px;
 	z-index: 2;
 	width: 200px;
 	height: 150px;
@@ -259,8 +260,13 @@ body::-webkit-scrollbar-thumb {
 
 .summary-wrapper.body-show,
 .recent-parses-wrapper.body-show {
-	width: 40px;
-	height: 200px;
+	width: 60px;
+	height: 215px;
+}
+
+.summary-wrapper.body-show {
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
 .transformable {
@@ -351,6 +357,12 @@ body::-webkit-scrollbar-thumb {
 	min-width: 24px;
 }
 
+/*.job-menu-small {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 155px;
+}*/
+
 .job-char-server-wrapper,
 .job-menu-small .char-jobs {
 	display: none; /* shown via javascript */
@@ -366,7 +378,9 @@ body::-webkit-scrollbar-thumb {
    ########################### */ 
 /* ALL BUTTONS GET THIS */
 job-button .md-icon-button {
+	margin: 0px !important;
 	margin-bottom: 5px !important;
+	margin-left: 3px !important;
 }
 job-button .md-icon-button:hover {
 	background-color: #d9d9d9 !important;
